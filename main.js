@@ -32,6 +32,24 @@ class Blockchain{
     newBlock.hash = newBlock.calculateHash();
     this.chain.push(newBlock); //real blockchain will have more checks here
   }
+
+  isChainValid(){
+    for(let i=0; i<this.chain.length; i++){
+      const currentBlock = this.chain[i];
+      const previousBlock = this.chain[i-1];
+
+      //current block fails hash caluclation
+      if(currentBlock.hash !== currentBlock.calculateHash()){
+        return false;
+      }
+
+      //check link hash
+      if(currentBlock.previousHash !== previousBlock.hash){
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 let AcrylixChain = new Blockchain();
