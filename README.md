@@ -9,3 +9,24 @@ This is a pseudo blockchain created solely based on my own interpretation and un
 - Mining Rewards
 - Transaction w/values
 - Address Balance checkers
+
+## How To return
+
+```javascript
+var Blockchain = require('../blockchain.js');
+var Transaction = require('../transaction.js');
+var Block = require('../block.js');
+
+let MyChain = new Blockchain();
+
+MyChain.createTransaction(new Transaction('address1','address2',100));
+
+console.log('Starting miner');
+MyChain.minePendingTx('minerAddress1');
+
+console.log('Starting miner 2');
+MyChain.minePendingTx('minerAddress1');
+
+console.log('Balance of miner is', MyChain.getBlanaceOfAddress('minerAddress1'));
+
+```
