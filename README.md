@@ -10,7 +10,7 @@ This is a pseudo blockchain created solely based on my own interpretation and un
 - Transaction w/values
 - Address Balance checkers
 
-## How To return
+## How To Run
 
 ```javascript
 var Blockchain = require('../blockchain.js');
