@@ -9,7 +9,7 @@ describe('Blockchain', function() {
       let Chain = new Blockchain();
 
       assert(Chain.chain.length == 1);
-      assert(Chain.chain[0].transactions == "Genesis Block");
+      assert(Chain.chain[0].transactions == 'Genesis Block');
     });
   });
 });

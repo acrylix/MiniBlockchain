@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/acrylix/MiniBlockchain.svg?branch=master)](https://travis-ci.org/acrylix/MiniBlockchain)
-
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ## MiniBlockchain wrote in Javascript
 
 This is a pseudo blockchain created solely based on my own interpretation and understanding of how a blockchain works, it contains basic blockchain features such as:

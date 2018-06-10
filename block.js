@@ -1,7 +1,7 @@
 const SHA256 = require('crypto-js/sha256');
 
-class Block{
-  constructor(timestamp, transactions, previousHash = ''){
+class Block {
+  constructor(timestamp, transactions, previousHash = '') {
     this.timestamp = timestamp;
     this.transactions = transactions;
     this.previousHash = previousHash;
@@ -9,17 +9,25 @@ class Block{
     this.nounce = 0;
   }
 
-  calculateHash(){
-    return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nounce).toString();
+  calculateHash() {
+    return SHA256(
+      this.index +
+        this.previousHash +
+        this.timestamp +
+        JSON.stringify(this.data) +
+        this.nounce
+    ).toString();
   }
 
   //POW
-  mineBlock(difficulty){
-    while(this.hash.substring(0,difficulty) !== Array(difficulty+1).join("0")){
+  mineBlock(difficulty) {
+    while (
+      this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')
+    ) {
       this.nounce++;
       this.hash = this.calculateHash();
     }
-    console.log("Block mined: " + this.hash);
+    console.log('Block mined: ' + this.hash);
   }
 }
 
