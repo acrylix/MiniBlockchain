@@ -68,9 +68,11 @@ let AcrylixChain = new Blockchain();
 AcrylixChain.difficulty = 5;
 
 console.log("Mining block 1");
-AcrylixChain.addBlock(new Block(1, "09/06/2018", {amount:999}));
+AcrylixChain.addBlock(new Block(1, "09/06/2018", {amount:2}));
 console.log("Mining block 2");
-AcrylixChain.addBlock(new Block(2, "10/06/2018", {amount:1}));
+AcrylixChain.addBlock(new Block(2, "10/06/2018", {amount:10}));
+console.log("Mining block 3");
+AcrylixChain.addBlock(new Block(2, "10/06/2018", {amount:99}));
 
 // //block tampering => false
 // AcrylixChain.chain[1].data = {amount:1000};
