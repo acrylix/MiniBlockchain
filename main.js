@@ -65,18 +65,16 @@ class Blockchain{
 }
 
 let AcrylixChain = new Blockchain();
-AcrylixChain.difficulty = 5;
+AcrylixChain.difficulty = 1;
 
 console.log("Mining block 1");
 AcrylixChain.addBlock(new Block(1, "09/06/2018", {amount:2}));
 console.log("Mining block 2");
 AcrylixChain.addBlock(new Block(2, "10/06/2018", {amount:10}));
-console.log("Mining block 3");
-AcrylixChain.addBlock(new Block(2, "10/06/2018", {amount:99}));
 
-// //block tampering => false
-// AcrylixChain.chain[1].data = {amount:1000};
-// //even on calculate rehash, previous links r broken on hash result => false
-// AcrylixChain.chain[1].hash = AcrylixChain.chain[1].calculateHash();
-//
-// console.log(AcrylixChain.isChainValid());
+//block tampering => false
+AcrylixChain.chain[1].data = {amount:1000};
+//even on calculate rehash, previous links r broken on hash result => false
+AcrylixChain.chain[1].hash = AcrylixChain.chain[1].calculateHash();
+
+console.log(AcrylixChain.isChainValid());
