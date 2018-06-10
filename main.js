@@ -1,10 +1,17 @@
 const SHA256 = require('crypto-js/sha256');
 
+class Transaction{
+  constructor(fromAddress, toAddress, amount){
+    this.fromAddress = fromAddress;
+    this.toAddress = toAddress;
+    this.amount = amount;
+  }
+}
+
 class Block{
-  constructor(index, timestamp, data, previousHash = ''){
-    this.index = index;
+  constructor(timestamp, transactions, previousHash = ''){
     this.timestamp = timestamp;
-    this.data = data;
+    this.transactions = transactions;
     this.previousHash = previousHash;
     this.hash = this.calculateHash();
     this.nounce = 0;
@@ -28,21 +35,48 @@ class Blockchain{
   constructor(){
     this.chain = [this.createGenesisBlock()];
     this.difficulty = 2;
+    this.pendingTx = [];
+    this.miningReward = 100;
   }
 
   createGenesisBlock(){
-    return new Block(0, "01/01/2018", "Genesis Block", "0");
+    return new Block("01/01/2018", "Genesis Block", "0");
   }
 
   getLatestBlock(){
     return this.chain[this.chain.length - 1];
   }
 
-  addBlock(newBlock){
-    newBlock.previousHash = this.getLatestBlock().hash;
-    // newBlock.hash = newBlock.calculateHash();
-    newBlock.mineBlock(this.difficulty);
-    this.chain.push(newBlock); //real blockchain will have more checks here
+  minePendingTx(miningRewardAddress){
+    //Includes all pending TX, in reality however, miners gets to choose which TX to include (higher gas price etc.)
+    let block = new Block(Date.now(), this.pendingTx);
+    block.mineBlock(this.difficulty);
+
+    console.log('Block sucessfully mined!');
+    this.chain.push(block);
+
+    this.pendingTx = [
+      new Transaction(null, miningRewardAddress, this.miningReward)
+    ]
+  }
+
+  createTransaction(transaction){
+    this.pendingTx.push(transaction);
+  }
+
+  getBlanaceOfAddress(address){
+    let balance = 0;
+    for(const block of this.chain){
+      for(const tx of block.transactions){
+        if(tx.fromAddress === address){
+          balance -= tx.amount;
+        }
+        if(tx.toAddress === address){
+          balance += tx.amount;
+        }
+      }
+    }
+    return balance;
   }
 
   isChainValid(){
@@ -65,16 +99,16 @@ class Blockchain{
 }
 
 let AcrylixChain = new Blockchain();
-AcrylixChain.difficulty = 5;
 
-console.log("Mining block 1");
-AcrylixChain.addBlock(new Block(1, "09/06/2018", {amount:999}));
-console.log("Mining block 2");
-AcrylixChain.addBlock(new Block(2, "10/06/2018", {amount:1}));
+AcrylixChain.createTransaction(new Transaction('address1','address2',100));
+AcrylixChain.createTransaction(new Transaction('address2','address1',50));
+AcrylixChain.createTransaction(new Transaction('address2','address3',15));
 
-// //block tampering => false
-// AcrylixChain.chain[1].data = {amount:1000};
-// //even on calculate rehash, previous links r broken on hash result => false
-// AcrylixChain.chain[1].hash = AcrylixChain.chain[1].calculateHash();
-//
-// console.log(AcrylixChain.isChainValid());
+console.log('Starting miner');
+AcrylixChain.minePendingTx('minerAddress1');
+
+console.log('Starting miner 2');
+AcrylixChain.minePendingTx('minerAddress1');
+
+console.log('Balance of miner is', AcrylixChain.getBlanaceOfAddress('minerAddress2'));
+console.log('Balance of address2',AcrylixChain.getBlanaceOfAddress('address2'));
