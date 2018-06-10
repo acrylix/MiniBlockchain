@@ -1,8 +1,9 @@
 {
-  "scripts":{
-    "test":"make test"
+  "scripts": {
+    "test": "make test"
   },
   "devDependencies": {
-			"mocha": "*"
-	},
+    "mocha": "*",
+    "crypto-js": "*"
+  }
 }
