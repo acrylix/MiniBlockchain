@@ -7,16 +7,27 @@ class Block{
     this.data = data;
     this.previousHash = previousHash;
     this.hash = this.calculateHash();
+    this.nounce = 0;
   }
 
   calculateHash(){
-    return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();
+    return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nounce).toString();
+  }
+
+  //POW
+  mineBlock(difficulty){
+    while(this.hash.substring(0,difficulty) !== Array(difficulty+1).join("0")){
+      this.nounce++;
+      this.hash = this.calculateHash();
+    }
+    console.log("Block mined: " + this.hash);
   }
 }
 
 class Blockchain{
   constructor(){
     this.chain = [this.createGenesisBlock()];
+    this.difficulty = 2;
   }
 
   createGenesisBlock(){
@@ -29,12 +40,13 @@ class Blockchain{
 
   addBlock(newBlock){
     newBlock.previousHash = this.getLatestBlock().hash;
-    newBlock.hash = newBlock.calculateHash();
+    // newBlock.hash = newBlock.calculateHash();
+    newBlock.mineBlock(this.difficulty);
     this.chain.push(newBlock); //real blockchain will have more checks here
   }
 
   isChainValid(){
-    for(let i=0; i<this.chain.length; i++){
+    for(let i=1; i<this.chain.length; i++){
       const currentBlock = this.chain[i];
       const previousBlock = this.chain[i-1];
 
@@ -53,8 +65,16 @@ class Blockchain{
 }
 
 let AcrylixChain = new Blockchain();
+AcrylixChain.difficulty = 5;
 
+console.log("Mining block 1");
 AcrylixChain.addBlock(new Block(1, "09/06/2018", {amount:999}));
+console.log("Mining block 2");
 AcrylixChain.addBlock(new Block(2, "10/06/2018", {amount:1}));
 
-console.log(JSON.stringify(AcrylixChain, null, 4));
+// //block tampering => false
+// AcrylixChain.chain[1].data = {amount:1000};
+// //even on calculate rehash, previous links r broken on hash result => false
+// AcrylixChain.chain[1].hash = AcrylixChain.chain[1].calculateHash();
+//
+// console.log(AcrylixChain.isChainValid());
