@@ -1,35 +1,6 @@
 const SHA256 = require('crypto-js/sha256');
-
-class Transaction{
-  constructor(fromAddress, toAddress, amount){
-    this.fromAddress = fromAddress;
-    this.toAddress = toAddress;
-    this.amount = amount;
-  }
-}
-
-class Block{
-  constructor(timestamp, transactions, previousHash = ''){
-    this.timestamp = timestamp;
-    this.transactions = transactions;
-    this.previousHash = previousHash;
-    this.hash = this.calculateHash();
-    this.nounce = 0;
-  }
-
-  calculateHash(){
-    return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nounce).toString();
-  }
-
-  //POW
-  mineBlock(difficulty){
-    while(this.hash.substring(0,difficulty) !== Array(difficulty+1).join("0")){
-      this.nounce++;
-      this.hash = this.calculateHash();
-    }
-    console.log("Block mined: " + this.hash);
-  }
-}
+const Transaction = require('./transaction.js');
+const Block = require('./block.js');
 
 class Blockchain{
   constructor(){
@@ -98,11 +69,13 @@ class Blockchain{
   }
 }
 
+module.exports = Blockchain;
+
 let AcrylixChain = new Blockchain();
 
 AcrylixChain.createTransaction(new Transaction('address1','address2',100));
 AcrylixChain.createTransaction(new Transaction('address2','address1',50));
-AcrylixChain.createTransaction(new Transaction('address2','address3',15));
+AcrylixChain.createTransaction(new Transaction('address2','address3',50));
 
 console.log('Starting miner');
 AcrylixChain.minePendingTx('minerAddress1');
